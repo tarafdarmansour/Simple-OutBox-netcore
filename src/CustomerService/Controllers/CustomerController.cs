@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using CustomerService.Models;
 using MediatR;
 using CustomerService.Command;
+using CustomerService.Queries;
 
 namespace CustomerService.Controllers
 {
@@ -34,21 +35,27 @@ namespace CustomerService.Controllers
         public async Task<ActionResult> Delete([FromBody] DeleteCustomerCommand cmd)
         {
             var result = await _bus.Send(cmd);
-            return new JsonResult(result);
+            return View("List");
         }
 
         [HttpPost]
         public async Task<ActionResult> Update([FromBody] UpdateCustomerCommand cmd)
         {
             var result = await _bus.Send(cmd);
-            return new JsonResult(result);
+            return View("List");
+        }
+
+        [HttpGet]
+        public  ActionResult Add()
+        {
+            return View();
         }
 
         [HttpPost]
         public async Task<ActionResult> Add([FromBody] CreateCustomerCommand cmd)
         {
             var result = await _bus.Send(cmd);
-            return new JsonResult(result);
+            return View("List");
         }
     }
 }

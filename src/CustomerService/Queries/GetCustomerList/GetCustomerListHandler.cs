@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CustomerService.Command
+namespace CustomerService.Queries
 {
     public class GetCustomerListHandler : IRequestHandler<GetCustomerListQuery, GetCustomerListResult>
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CustomerService.Command
+namespace CustomerService.Queries
 {
     public class GetCustomerListQuery : IRequest<GetCustomerListResult>
     {
