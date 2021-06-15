@@ -33,7 +33,7 @@ namespace CustomerService.Queries
                 CustomerListResultItems = customers.Select(c => new GetCustomerListResultItem
                 {
                     Id = c.Id,
-                    BirthDate = c.BirthDate.ToShortTimeString(),
+                    BirthDate = c.BirthDate.ToShortDateString(),
                     FirstName = c.FirstName,
                     LastName = c.LastName
                 })

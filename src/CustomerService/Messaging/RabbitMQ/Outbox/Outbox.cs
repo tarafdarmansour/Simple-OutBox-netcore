@@ -74,6 +74,10 @@ namespace CustomerService.Messaging.RabbitMQ.Outbox
                         msg.IsProcced = true;
                         msg.ProccesDateTime = DateTime.Now;
 
+                        _context.Update(msg);
+
+                        await _context.SaveChangesAsync();
+
                         tx.Commit();
                         logger.LogSuccessPush();
                         return true;

@@ -16,9 +16,16 @@ namespace CustomerService.Messaging.RabbitMQ.Outbox
         {
         }
         
+        public void Procces()
+        {
+            IsProcced = true;
+            ProccesDateTime = DateTime.Now;
+        }
+
         public Message(object message)
         {
             Type = message.GetType().FullName + ", " + message.GetType().Assembly.GetName().Name;
+            PublicId = Guid.NewGuid(); 
             Payload = JsonConvert.SerializeObject(message);
         }
 

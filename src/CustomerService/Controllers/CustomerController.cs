@@ -9,6 +9,7 @@ using CustomerService.Models;
 using MediatR;
 using CustomerService.Command;
 using CustomerService.Queries;
+using CustomerService.Messaging.RabbitMQ.Outbox;
 
 namespace CustomerService.Controllers
 {
@@ -16,11 +17,13 @@ namespace CustomerService.Controllers
     {
         private readonly ILogger<CustomerController> _logger;
         private readonly IMediator _bus;
+        private readonly Outbox _outbox;
 
-        public CustomerController(ILogger<CustomerController> logger, IMediator bus)
+        public CustomerController(ILogger<CustomerController> logger, IMediator bus,Outbox outbox )
         {
             _logger = logger;
             _bus = bus;
+            _outbox = outbox;
         }
 
         [HttpGet]
@@ -28,21 +31,24 @@ namespace CustomerService.Controllers
         {
             var cmd = new GetCustomerListQuery();
             var result = await _bus.Send(cmd);
+
+            await _outbox.PushPendingMessages();
+
             return View(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Delete([FromBody] DeleteCustomerCommand cmd)
+        public async Task<ActionResult> Delete([FromForm] DeleteCustomerCommand cmd)
         {
             var result = await _bus.Send(cmd);
-            return View("List");
+            return RedirectToAction("List");
         }
 
         [HttpPost]
-        public async Task<ActionResult> Update([FromBody] UpdateCustomerCommand cmd)
+        public async Task<ActionResult> Update([FromForm] UpdateCustomerCommand cmd)
         {
             var result = await _bus.Send(cmd);
-            return View("List");
+            return RedirectToAction("List");
         }
 
         [HttpGet]
@@ -52,10 +58,10 @@ namespace CustomerService.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Add([FromBody] CreateCustomerCommand cmd)
+        public async Task<ActionResult> Add([FromForm] CreateCustomerCommand cmd)
         {
             var result = await _bus.Send(cmd);
-            return View("List");
+            return RedirectToAction("List");
         }
     }
 }

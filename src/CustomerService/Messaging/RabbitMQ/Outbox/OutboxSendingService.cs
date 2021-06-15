@@ -9,7 +9,7 @@ namespace CustomerService.Messaging.RabbitMQ.Outbox
     {
         private readonly Outbox outbox;
         private Timer timer;
-        private static object locker = new object();
+        private static readonly object locker = new object();
 
         public OutboxSendingService(Outbox outbox)
         {
