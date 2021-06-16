@@ -17,13 +17,11 @@ namespace CustomerService.Controllers
     {
         private readonly ILogger<CustomerController> _logger;
         private readonly IMediator _bus;
-        private readonly Outbox _outbox;
 
-        public CustomerController(ILogger<CustomerController> logger, IMediator bus,Outbox outbox )
+        public CustomerController(ILogger<CustomerController> logger, IMediator bus)
         {
             _logger = logger;
             _bus = bus;
-            _outbox = outbox;
         }
 
         [HttpGet]
@@ -31,8 +29,6 @@ namespace CustomerService.Controllers
         {
             var cmd = new GetCustomerListQuery();
             var result = await _bus.Send(cmd);
-
-            await _outbox.PushPendingMessages();
 
             return View(result);
         }

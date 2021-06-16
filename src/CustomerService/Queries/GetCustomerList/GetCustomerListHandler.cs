@@ -18,7 +18,7 @@ namespace CustomerService.Queries
         private readonly ILogger<GetCustomerListHandler> _logger;
         private readonly CustomerContext _context;
 
-        public GetCustomerListHandler(ILogger<GetCustomerListHandler> logger, CustomerContext context, IEventPublisher eventPublisher)
+        public GetCustomerListHandler(ILogger<GetCustomerListHandler> logger, CustomerContext context)
         {
             _logger = logger;
             _context = context;

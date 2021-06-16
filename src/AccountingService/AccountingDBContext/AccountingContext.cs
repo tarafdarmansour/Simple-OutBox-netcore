@@ -1,4 +1,5 @@
 using AccountingService.ModelConfiguration;
+using AccountingService.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -24,8 +25,7 @@ namespace AccountingService.AccountingDBContext
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new CustomerConfig());
-            modelBuilder.ApplyConfiguration(new MessageConfig());
+            modelBuilder.ApplyConfiguration(new AccountingCustomerConfig());
             base.OnModelCreating(modelBuilder);
         }
     }
