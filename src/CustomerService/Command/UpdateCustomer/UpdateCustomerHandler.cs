@@ -31,7 +31,7 @@ namespace CustomerService.Command
 
             entity.UpdateCustomer(new Customer(request.FirstName, request.LastName, request.BirthDate));
 
-            await _context.Customers.AddAsync(entity, cancellationToken);
+            _context.Customers.Update(entity);
 
             await _eventPublisher.PublishMessage(CustomerUpdated(entity));
 

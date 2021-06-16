@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AccountingService.AccountingDBContext;
+using AccountingService.Messaging.RabbitMq;
+using CustomerService.Events;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,9 +17,12 @@ namespace AccountingService
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _env;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -32,6 +37,7 @@ namespace AccountingService
 
             services.AddLogging();
             services.AddDbContext<AccountingContext>();
+            services.AddRabbitListeners(Configuration.GetSection("RabbitMqOptions").Get<RabbitMqOptions>(), _env);
 
 
         }
@@ -55,6 +61,13 @@ namespace AccountingService
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseRabbitListeners(new List<Type> 
+            { 
+                typeof(CustomerCreated), 
+                typeof(CustomerUpdated), 
+                typeof(CustomerDeleted),
+            });
 
             app.UseEndpoints(endpoints =>
             {
