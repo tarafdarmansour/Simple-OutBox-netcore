@@ -18,7 +18,7 @@ namespace CustomerService.Command
         private readonly CustomerContext _context;
         private readonly IEventPublisher _eventPublisher;
 
-        public DeleteCustomerHandler(ILogger<DeleteCustomerHandler> logger,CustomerContext context, IEventPublisher eventPublisher)
+        public DeleteCustomerHandler(ILogger<DeleteCustomerHandler> logger, CustomerContext context, IEventPublisher eventPublisher)
         {
             _logger = logger;
             _context = context;
@@ -28,13 +28,21 @@ namespace CustomerService.Command
         {
             var entity = await _context.Customers.FindAsync(request.Id);
 
-            _context.Customers.Remove(entity);
+            if (entity != null)
+            {
+                _context.Customers.Remove(entity);
 
-            await _eventPublisher.PublishMessage(CustomerDeleted(entity));
+                await _eventPublisher.PublishMessage(CustomerDeleted(entity));
 
-            await _context.SaveChangesAsync(cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
 
-            return new DeleteCustomerResult { IsDeleted = true};
+                return new DeleteCustomerResult { IsDeleted = true };
+            }
+            else
+            {
+                return new DeleteCustomerResult { IsDeleted = false };
+            }
+
         }
 
         private CustomerDeleted CustomerDeleted(Customer customer)

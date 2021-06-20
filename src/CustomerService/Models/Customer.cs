@@ -18,6 +18,7 @@ namespace CustomerService.Models
             this.FirstName = customer.FirstName;
             this.LastName = customer.LastName;
             this.BirthDate = customer.BirthDate;
+            this.UpdateDateTime = DateTime.Now;
             return this;
         }
 

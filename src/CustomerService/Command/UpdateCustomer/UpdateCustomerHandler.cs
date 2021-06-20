@@ -28,16 +28,23 @@ namespace CustomerService.Command
         {
 
             var entity = await _context.Customers.FindAsync(request.Id);
+            if (entity != null)
+            {
+                entity.UpdateCustomer(new Customer(request.FirstName, request.LastName, request.BirthDate));
 
-            entity.UpdateCustomer(new Customer(request.FirstName, request.LastName, request.BirthDate));
+                _context.Customers.Update(entity);
 
-            _context.Customers.Update(entity);
+                await _eventPublisher.PublishMessage(CustomerUpdated(entity));
 
-            await _eventPublisher.PublishMessage(CustomerUpdated(entity));
+                await _context.SaveChangesAsync(cancellationToken);
 
-            await _context.SaveChangesAsync(cancellationToken);
+                return new UpdateCustomerResult { IsUpdated = true };
+            }
+            else
+            {
+                return new UpdateCustomerResult { IsUpdated = false };
+            }
 
-            return new UpdateCustomerResult { IsUpdated = true };
         }
 
         private CustomerUpdated CustomerUpdated(Customer customer)

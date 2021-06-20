@@ -34,17 +34,17 @@ namespace CustomerService.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Delete([FromForm] DeleteCustomerCommand cmd)
+        public async Task<JsonResult> Delete([FromBody] DeleteCustomerCommand cmd)
         {
             var result = await _bus.Send(cmd);
-            return RedirectToAction("List");
+            return new JsonResult(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Update([FromForm] UpdateCustomerCommand cmd)
+        public async Task<JsonResult> Update([FromBody] UpdateCustomerCommand cmd)
         {
             var result = await _bus.Send(cmd);
-            return RedirectToAction("List");
+            return new JsonResult(result);
         }
 
         [HttpGet]

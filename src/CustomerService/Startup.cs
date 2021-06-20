@@ -29,6 +29,12 @@ namespace CustomerService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
 
             services.AddControllersWithViews();
             services.AddRabbit(_env);
@@ -36,12 +42,15 @@ namespace CustomerService
 
             services.AddLogging();
             services.AddDbContext<CustomerContext>();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
             
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("MyPolicy");
             //if (env.IsDevelopment())
             //{
             app.UseDeveloperExceptionPage();
@@ -53,6 +62,7 @@ namespace CustomerService
             //    app.UseHsts();
             //}
             //app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();

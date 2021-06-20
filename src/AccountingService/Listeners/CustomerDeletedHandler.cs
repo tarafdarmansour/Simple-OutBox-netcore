@@ -7,23 +7,22 @@ using MediatR;
 
 namespace DashboardService.Listeners
 {
-    public class CustomerUpdatedHandler : INotificationHandler<CustomerUpdated>
+    public class CustomerDeletedHandler : INotificationHandler<CustomerDeleted>
     {
         private readonly AccountingContext _context;
 
-        public CustomerUpdatedHandler(AccountingContext context)
+        public CustomerDeletedHandler(AccountingContext context)
         {
             _context = context;
         }
 
-        public async Task Handle(CustomerUpdated notification, CancellationToken cancellationToken)
+        public async Task Handle(CustomerDeleted notification, CancellationToken cancellationToken)
         {
 
             var customer = await _context.Customers.FindAsync(notification.Id);
             if (customer != null)
             {
-                customer.UpdateAccountingCustomer(notification);
-                _context.Customers.Update(customer);
+                _context.Customers.Remove(customer);
 
                 await _context.SaveChangesAsync(cancellationToken);
             }

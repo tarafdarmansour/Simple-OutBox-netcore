@@ -21,6 +21,14 @@ namespace AccountingService.Models
             Balance = r.Next(10, 200);
             CreateDateTime = DateTime.Now;
         }
+
+        public void UpdateAccountingCustomer(CustomerUpdated customer)
+        {
+            FirstName = customer.FirstName;
+            LastName = customer.LastName;
+            UpdateDateTime = DateTime.Now;
+        }
+
         public Guid Id { get; protected set; }
         public string FirstName { get; protected set; }
         public string LastName { get; protected set; }
