@@ -43,8 +43,10 @@ namespace TaskService.Messaging.RabbitMq
                     {
                         var internalBus = scope.ServiceProvider.GetRequiredService<IMediator>();
                         await internalBus.Publish(msg);
-                    }
 
+                        
+                    };
+                    
                 },
                 cfg =>
                     cfg.WithExchange(excfg =>
@@ -57,7 +59,6 @@ namespace TaskService.Messaging.RabbitMq
                     {
                         qcfg.WithName("task-service-" + typeof(T).Name);
                     })
-
                 ) ;
         }
     }

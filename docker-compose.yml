@@ -47,8 +47,7 @@ services:
       - 5103:80
     networks:
       - mynetwork
-      
-
-
+ 
 networks:
   mynetwork: 
+    driver: bridge
